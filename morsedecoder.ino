@@ -9,6 +9,8 @@ https://en.wikipedia.org/wiki/Morse_code
     5. The space between words is 7 units
 */
 
+const int buttonPin = 2;
+const int baudRate = 9600;
 
 String letters[] = {
     ".-",
@@ -50,12 +52,20 @@ String digits[] = {
     "---..",
     "----."
 };
+int buttonState = 0;
+
 
 void setup()
 {
+    pinMode(buttonPin, INPUT);
+    Serial.begin(baudRate);
 }
 
 
 void loop()
 {
+    buttonState = digitalRead(buttonPin);
+    if (buttonState == HIGH) {
+        Serial.write("pressed");
+    }
 }
