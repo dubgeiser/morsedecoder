@@ -38,7 +38,7 @@ String letters[] = {
     "-.--",
     "--.."
 };
-String digits = {
+String digits[] = {
     "-----",
     ".----",
     "..---",
@@ -48,7 +48,7 @@ String digits = {
     "-....",
     "--...",
     "---..",
-    "----.",
+    "----."
 };
 
 void setup()
