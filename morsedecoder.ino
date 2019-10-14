@@ -52,8 +52,8 @@ String digits[] = {
     "---..",
     "----."
 };
-int buttonState = 0;
-int lastButtonState = 0;
+int buttonState;
+int lastButtonState = LOW;
 
 
 void setup()
