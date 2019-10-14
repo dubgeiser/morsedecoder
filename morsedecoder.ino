@@ -53,6 +53,7 @@ String digits[] = {
     "----."
 };
 int buttonState = 0;
+int lastButtonState = 0;
 
 
 void setup()
@@ -65,7 +66,16 @@ void setup()
 void loop()
 {
     buttonState = digitalRead(buttonPin);
-    if (buttonState == HIGH) {
-        Serial.write("pressed");
+    if (isButtonStateChanged()) {
+        lastButtonState = buttonState;
+        if (buttonState == HIGH) {
+            Serial.write("pressed");
+        }
     }
+}
+
+
+bool isButtonStateChanged()
+{
+    return lastButtonState != buttonState;
 }
