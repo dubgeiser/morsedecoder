@@ -11,6 +11,7 @@ https://en.wikipedia.org/wiki/Morse_code
 
 const int buttonPin = 2;
 const int baudRate = 9600;
+const unsigned long debounceDelay = 50;
 
 String letters[] = {
     ".-",
@@ -53,7 +54,8 @@ String digits[] = {
     "----."
 };
 int buttonState;
-int lastButtonState = LOW;
+int lastReading = LOW;
+unsigned long lastDebouncedTime = 0;
 
 
 void setup()
@@ -62,20 +64,40 @@ void setup()
     Serial.begin(baudRate);
 }
 
-
 void loop()
 {
-    buttonState = digitalRead(buttonPin);
-    if (isButtonStateChanged()) {
-        lastButtonState = buttonState;
-        if (buttonState == HIGH) {
-            Serial.write("pressed");
+    int reading = digitalRead(buttonPin);
+    resetDebounceTimer(reading);
+    if (isReadyToReadButtonState()) {
+        if (isButtonStateChanged(reading)) {
+            buttonState = reading;
+            handleButtonStateChange(buttonState);
         }
+    }
+    lastReading = reading;
+}
+
+bool isButtonStateChanged(int reading)
+{
+    return reading != buttonState;
+}
+
+void resetDebounceTimer(int reading)
+{
+    if (reading != lastReading)
+    {
+        lastDebouncedTime = millis();
     }
 }
 
-
-bool isButtonStateChanged()
+bool isReadyToReadButtonState()
 {
-    return lastButtonState != buttonState;
+    return ((millis() - lastDebouncedTime) > debounceDelay);
+}
+
+void handleButtonStateChange(int state)
+{
+    if (state == HIGH) {
+        Serial.write("pressed");
+    }
 }
