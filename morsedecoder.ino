@@ -57,15 +57,12 @@ int buttonState;
 int lastReading = LOW;
 unsigned long lastDebouncedTime = 0;
 
-
-void setup()
-{
+void setup() {
     pinMode(buttonPin, INPUT);
     Serial.begin(baudRate);
 }
 
-void loop()
-{
+void loop() {
     int reading = digitalRead(buttonPin);
     resetDebounceTimer(reading);
     if (isReadyToReadButtonState()) {
@@ -77,26 +74,21 @@ void loop()
     lastReading = reading;
 }
 
-bool isButtonStateChanged(int reading)
-{
+bool isButtonStateChanged(int reading) {
     return reading != buttonState;
 }
 
-void resetDebounceTimer(int reading)
-{
-    if (reading != lastReading)
-    {
+void resetDebounceTimer(int reading) {
+    if (reading != lastReading) {
         lastDebouncedTime = millis();
     }
 }
 
-bool isReadyToReadButtonState()
-{
+bool isReadyToReadButtonState() {
     return ((millis() - lastDebouncedTime) > debounceDelay);
 }
 
-void handleButtonStateChange(int state)
-{
+void handleButtonStateChange(int state) {
     if (state == HIGH) {
         Serial.write("pressed");
     }
