@@ -56,6 +56,7 @@ String digits[] = {
 int buttonState;
 int lastReading = LOW;
 unsigned long lastDebouncedTime = 0;
+unsigned long lastUnitTime = 0;
 
 void setup() {
     pinMode(buttonPin, INPUT);
@@ -89,7 +90,18 @@ bool isReadyToReadButtonState() {
 }
 
 void handleButtonStateChange(int state) {
-    if (state == HIGH) {
-        Serial.write("pressed");
+    // First press, just start timer.
+    if (lastUnitTime == 0) {
+        lastUnitTime = millis();
+        return;
     }
+    if (state == HIGH) {
+        Serial.print("Released: ");
+        Serial.println((millis() - lastUnitTime));
+    } else {
+        // dotOrDash = lastTiming - millis()
+        Serial.print("Pressed: ");
+        Serial.println((millis() - lastUnitTime));
+    }
+    lastUnitTime = millis();
 }
